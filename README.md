@@ -1,1 +1,0 @@
-# developers-team-aws-eks
