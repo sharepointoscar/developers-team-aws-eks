@@ -11,7 +11,8 @@ class MyStack extends TerraformStack {
     });
 
     new KubernetesProvider(this, "kind", {configPath:"~/.kube/config"});
-
+    
+    // TODO: add namespace resource once ingress is working
     // const appsNamespace = new Namespace(this, "apps", {
     //   metadata: [
     //     {
