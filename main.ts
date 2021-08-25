@@ -25,11 +25,8 @@ class MyStack extends TerraformStack {
     new Deployment(this, "skiapp-deployment", {
       metadata: [
         {
-          name: app,
-          namespace: "default",
-          labels: {
-            app,
-          },
+          name: "skiapp-deployment",
+          namespace: "default"
         }
       ],
       spec: [
@@ -38,7 +35,7 @@ class MyStack extends TerraformStack {
           selector: [
             {
               matchLabels: {
-                app,
+                app
               },
             },
           ],
@@ -47,7 +44,7 @@ class MyStack extends TerraformStack {
               metadata: [
                 {
                   labels: {
-                    app,
+                    app
                   },
                 },
               ],
@@ -56,29 +53,12 @@ class MyStack extends TerraformStack {
                   container: [
                     {
                       image: "sharepointoscar/skiapp:v1",
-                      name: "skiapp",
-                      port: [
-                        {
+                      name: app,
+                      port: [{
                           containerPort: 8080,
-                        },
-                      ],
-                      resources: [
-                        {
-                          limits: {
-                            
-                              cpu: "0.5",
-                              memory: "512Mi",
-                            
-                          },
-                          requests: 
-                            {
-                              cpu: "250m",
-                              memory: "50Mi",
-                            },
-                        },
-                      ],
-                    },
-                  ],
+                      }]
+                    }
+                  ]
                 },
               ],
             },
@@ -90,34 +70,31 @@ class MyStack extends TerraformStack {
     new Service(this, "skiapp-service", {
       metadata: [
         {
-          name: app,
+          name: "skiapp-service",
           namespace: "default"
-        },
+        }
       ],
-      spec: [
-        {
+      spec: [{
           selector: {
-            app,
+            app
           },
           port: [
             {
               port: 80,
               targetPort: "8080",
-            },
-          ],
-          type: "NodePort",
-        },
-      ],
+              protocol: "TCP"
+          }],
+          type: "NodePort"
+      }]
     });
 
     new Ingress(this,"skiapp-ingress", {
-      metadata: [
-        {
-          name: app,
+      metadata: [{
+          name: "skiapp-ingress",
           namespace: "default",
           annotations:{
             "kubernetes.io/ingress.class": "alb",
-            "alb.ingress.kubernetes.io/group.name": "finance",
+            "alb.ingress.kubernetes.io/group.name": "marketing",
             "alb.ingress.kubernetes.io/scheme": "internet-facing",
             "alb.ingress.kubernetes.io/target-type": "ip",
             //"alb.ingress.kubernetes.io/subnets": "subnet-0c42d09812287fa87,subnet-00763f871b321492c,subnet-0d683a69d9ccb503e",
@@ -126,12 +103,8 @@ class MyStack extends TerraformStack {
             "alb.ingress.kubernetes.io/tags": "Environment=dev,Team=Finance"
           }
 
-        },
-
-      ],
-
+      }],
       spec: [{
-
         rule:[{
           host:"skiapp.k8s.devopsoscar.dev",
           http: [{
