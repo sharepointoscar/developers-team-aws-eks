@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { App, TerraformStack } from "cdktf";
+import { App, TerraformStack, RemoteBackend } from "cdktf";
 import { AwsProvider } from "@cdktf/provider-aws";
 import {KubernetesProvider, Deployment, Service, Ingress } from "@cdktf/provider-kubernetes";
 class MyStack extends TerraformStack {
@@ -9,7 +9,15 @@ class MyStack extends TerraformStack {
     new AwsProvider(this, 'aws', {
       region: 'us-west-2'
     });
+    // Remote Backend - https://www.terraform.io/docs/backends/types/remote.html
+    new RemoteBackend(this, {
+      hostname: "app.terraform.io",
+      organization: "sharepointoscar",
 
+      workspaces: {
+        name: "developers-team-aws-eks",
+      },
+    });
     new KubernetesProvider(this, "kind", {configPath:"~/.kube/config"});
     
     // TODO: add namespace resource once ingress is working
