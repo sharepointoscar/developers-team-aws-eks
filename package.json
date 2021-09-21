@@ -21,7 +21,6 @@
   "dependencies": {
     "@cdktf/provider-aws": "^2.0.8",
     "@cdktf/provider-kubernetes": "^0.3.8",
-    "cdktf": "^0.5.0",
     "constructs": "^3.3.125"
   },
   "devDependencies": {

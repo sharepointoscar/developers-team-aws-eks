@@ -5,6 +5,7 @@
   "terraformModules": [],
   "context": {
     "excludeStackIdFromLogicalIds": "true",
-"allowSepCharsInLogicalIds": "true"
-  }
+    "allowSepCharsInLogicalIds": "true"
+  },
+  "projectId": "06260fe0-2029-409e-896c-332e34fa1dd8"
 }
