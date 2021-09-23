@@ -1,0 +1,215 @@
+{
+  "//": {
+    "metadata": {
+      "version": "0.5.0",
+      "stackName": "developers-team-aws-eks",
+      "backend": "remote"
+    }
+  },
+  "terraform": {
+    "required_providers": {
+      "aws": {
+        "version": "~> 3.0",
+        "source": "aws"
+      },
+      "kubernetes": {
+        "version": "~> 2.0",
+        "source": "kubernetes"
+      }
+    },
+    "backend": {
+      "remote": {
+        "hostname": "app.terraform.io",
+        "organization": "sharepointoscar",
+        "workspaces": {
+          "name": "developers-team-aws-eks"
+        }
+      }
+    }
+  },
+  "provider": {
+    "aws": [
+      {
+        "region": "us-west-2"
+      }
+    ],
+    "kubernetes": [
+      {
+        "config_path": "~/.kube/config"
+      }
+    ]
+  },
+  "resource": {
+    "kubernetes_deployment": {
+      "skiapp-deployment": {
+        "metadata": [
+          {
+            "name": "skiapp-deployment",
+            "namespace": "default"
+          }
+        ],
+        "spec": [
+          {
+            "replicas": "2",
+            "selector": [
+              {
+                "match_labels": {
+                  "app": "skiapp"
+                }
+              }
+            ],
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "labels": {
+                      "app": "skiapp"
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "container": [
+                      {
+                        "image": "sharepointoscar/skiapp:v1",
+                        "name": "skiapp",
+                        "port": [
+                          {
+                            "container_port": 8080
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "//": {
+          "metadata": {
+            "path": "developers-team-aws-eks/skiapp-deployment",
+            "uniqueId": "skiapp-deployment",
+            "stackTrace": [
+              "new TerraformElement (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/cdktf/lib/terraform-element.js:21:28)",
+              "new TerraformResource (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/cdktf/lib/terraform-resource.js:17:9)",
+              "new Deployment (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/@cdktf/provider-kubernetes/lib/deployment.js:1909:9)",
+              "new MyStack (/Users/osmed/git-repos/developers-team-aws-eks/main.js:30:9)",
+              "Object.<anonymous> (/Users/osmed/git-repos/developers-team-aws-eks/main.js:128:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1101:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)",
+              "Module.load (node:internal/modules/cjs/loader:981:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:79:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        }
+      }
+    },
+    "kubernetes_service": {
+      "skiapp-service": {
+        "metadata": [
+          {
+            "name": "skiapp-service",
+            "namespace": "default"
+          }
+        ],
+        "spec": [
+          {
+            "selector": {
+              "app": "skiapp"
+            },
+            "type": "NodePort",
+            "port": [
+              {
+                "port": 80,
+                "protocol": "TCP",
+                "target_port": "8080"
+              }
+            ]
+          }
+        ],
+        "//": {
+          "metadata": {
+            "path": "developers-team-aws-eks/skiapp-service",
+            "uniqueId": "skiapp-service",
+            "stackTrace": [
+              "new TerraformElement (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/cdktf/lib/terraform-element.js:21:28)",
+              "new TerraformResource (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/cdktf/lib/terraform-resource.js:17:9)",
+              "new Service (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/@cdktf/provider-kubernetes/lib/service.js:127:9)",
+              "new MyStack (/Users/osmed/git-repos/developers-team-aws-eks/main.js:74:9)",
+              "Object.<anonymous> (/Users/osmed/git-repos/developers-team-aws-eks/main.js:128:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1101:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)",
+              "Module.load (node:internal/modules/cjs/loader:981:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:79:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        }
+      }
+    },
+    "kubernetes_ingress": {
+      "skiapp-ingress": {
+        "metadata": [
+          {
+            "annotations": {
+              "kubernetes.io/ingress.class": "alb",
+              "alb.ingress.kubernetes.io/group.name": "marketing",
+              "alb.ingress.kubernetes.io/scheme": "internet-facing",
+              "alb.ingress.kubernetes.io/target-type": "ip",
+              "alb.ingress.kubernetes.io/tags": "Environment=dev,Team=Finance"
+            },
+            "name": "skiapp-ingress",
+            "namespace": "default"
+          }
+        ],
+        "spec": [
+          {
+            "rule": [
+              {
+                "host": "skiapp.k8s.devopsoscar.dev",
+                "http": [
+                  {
+                    "path": [
+                      {
+                        "path": "/*",
+                        "backend": [
+                          {
+                            "service_name": "skiapp-service",
+                            "service_port": "80"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "//": {
+          "metadata": {
+            "path": "developers-team-aws-eks/skiapp-ingress",
+            "uniqueId": "skiapp-ingress",
+            "stackTrace": [
+              "new TerraformElement (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/cdktf/lib/terraform-element.js:21:28)",
+              "new TerraformResource (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/cdktf/lib/terraform-resource.js:17:9)",
+              "new Ingress (/Users/osmed/git-repos/developers-team-aws-eks/node_modules/@cdktf/provider-kubernetes/lib/ingress.js:152:9)",
+              "new MyStack (/Users/osmed/git-repos/developers-team-aws-eks/main.js:95:9)",
+              "Object.<anonymous> (/Users/osmed/git-repos/developers-team-aws-eks/main.js:128:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1101:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)",
+              "Module.load (node:internal/modules/cjs/loader:981:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:79:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

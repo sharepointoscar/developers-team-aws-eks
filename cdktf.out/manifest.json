@@ -1,0 +1,11 @@
+{
+  "version": "0.5.0",
+  "stacks": {
+    "developers-team-aws-eks": {
+      "name": "developers-team-aws-eks",
+      "constructPath": "developers-team-aws-eks",
+      "workingDirectory": "stacks/developers-team-aws-eks",
+      "synthesizedStackPath": "stacks/developers-team-aws-eks/cdk.tf.json"
+    }
+  }
+}
