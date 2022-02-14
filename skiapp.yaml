@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: skiapp
-        image: sharepointoscar/skiapp:v1
+        image: sharepointoscar/skiapp:v2
         ports:
         - containerPort: 8080
 
@@ -46,8 +46,8 @@ metadata:
     alb.ingress.kubernetes.io/group.name: marketing
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    #alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-    #alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/tags: Environment=dev,Team=Marketing
 
 spec:

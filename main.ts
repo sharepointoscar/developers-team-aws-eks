@@ -1,7 +1,8 @@
 import { Construct } from "constructs";
 import { App, TerraformStack, RemoteBackend } from "cdktf";
-import { AwsProvider } from "@cdktf/provider-aws";
+import { AwsProvider,DataAwsEksCluster, DataAwsEksClusterAuth } from "@cdktf/provider-aws";
 import {KubernetesProvider, Deployment, Service, Ingress } from "@cdktf/provider-kubernetes";
+
 class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
     super(scope, name);
@@ -18,7 +19,27 @@ class MyStack extends TerraformStack {
         name: "developers-team-aws-eks",
       },
     });
-    new KubernetesProvider(this, "kind", {configPath:"~/.kube/config"});
+
+    const dataAwsEksCluster = new DataAwsEksCluster(
+      this,
+      "cluster",
+      {
+        name: "hashi-preprod-dev-eks",
+      }
+    );
+    const dataAwsEksClusterAuth = new DataAwsEksClusterAuth(
+      this,
+      "auth",
+      {
+        name: "hashi-preprod-dev-eks",
+      }
+    );
+    
+    new KubernetesProvider(this, "kubernetes", {
+      clusterCaCertificate: `\${base64decode(${dataAwsEksCluster.certificateAuthority.fqn}[0].data)}`,
+      host: dataAwsEksCluster.endpoint,
+      token: dataAwsEksClusterAuth.token,
+    });
     
     // TODO: add namespace resource once ingress is working
     // const appsNamespace = new Namespace(this, "apps", {
