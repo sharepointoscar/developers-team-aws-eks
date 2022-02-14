@@ -6,3 +6,5 @@ cdktf.log
 *terraform.*.tfstate*
 .gen
 *.vscode
+.DS_Store
+*cdktf.out
