@@ -101,7 +101,7 @@ class MyStack extends TerraformStack {
             protocol: "TCP",
           },
         ],
-        type: "NodePort",
+        type: "LoadBalancer",
       },
     });
 
