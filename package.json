@@ -19,9 +19,10 @@
     "node": ">=10.12"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^2.0.13",
-    "@cdktf/provider-kubernetes": "^0.3.8",
-    "constructs": "^3.3.217"
+    "@cdktf/provider-aws": "^5.0.19",
+    "@cdktf/provider-kubernetes": "^0.6.21",
+    "cdktf": "^0.9.0",
+    "constructs": "^10.0.63"
   },
   "devDependencies": {
     "@types/node": "^16.6.1",
